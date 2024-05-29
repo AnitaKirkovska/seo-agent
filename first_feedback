@@ -1,75 +1,178 @@
-Editor said that you need to work on the article a bit more. Improve this version of the article ## What is Prompt Engineering: A Developer's Guide to Unlocking the Power of LLMs
+Editor said that you need to work on the article a bit more. Here's the feedback What is a prompt? Generative AI models interface with the user through mostly textual input. You tell the model what to do through a textual interface, and the model tries to accomplish the task. What you tell the model to do in a broad sense is the prompt. In the case of image generation AI models such as DALLE-2 or Stable Diffusion, the prompt is mainly a description of the image you want to generate. In the case of large language models (LLMs) such as GPT-3 or ChatGPT the prompt can contain anything from a simple question ("Who is the president of the US?") to a complicated problem with all kinds of data inserted in the prompt (note that you can even input a CSV file with raw data as part of the input). It can also be a vague statement such as "Tell me a joke. I am down today.". Even more generally, in generative task oriented models such as Gato, the prompt can be extremely high level and define a task you need help with ("I need to organize a one week trip to Greece"). For the rest of this document, and for now, we will focus on the specific use case of prompts for LLMs.
+- The section lacks depth and originality. It provides a basic explanation but doesn't offer new insights or detailed analysis. It needs more comprehensive coverage and examples to be engaging.
 
-The world of software development is rapidly evolving, and at the forefront of this evolution are large language models (LLMs). These powerful AI systems, capable of understanding and generating human-like text, are transforming how we interact with technology. But harnessing their full potential requires a new skillset: **prompt engineering**.
+Prompt engineering is a very recent but rapidly growing discipline that has the goal of designing the optimal prompt given a generative model and a goal. Prompt engineering is growing so quickly that many believe that it will replace other aspects of machine learning such as feature engineering or architecture engineering for large neural networks. Prompt engineering requires some domain understanding to incorporate the goal into the prompt (e. g. by determining what good and bad outcomes should look like). It also requires understanding of the model. Different models will respond differently to the same kind of prompting. Generating prompts at some scale requires a programmatic approach. At the most basic level you want to generate prompt templates that can be programmatically modified according to some dataset or context. As a basic example, if you had a database of people with a short blurb about them similar to the one used in the college essay above. The prompt template would become something like "Given the following information about [USER], write a 4 paragraph college essay: [USER_BLURB]". And the programmatic approach to generating college letters for all users would look something like: for user, blurb in students. items(): Finally, prompt engineering, as any engineering discipline, is iterative and requires some exploration in order to find the right solution. While this is not something that I have heard of, prompt engineering will require many of the same engineering processes as software engineering (e. g. version control, and regression testing).
+- This section is informative but could benefit from more detailed examples and case studies. It should also include more advanced techniques and real-world applications to make it more engaging.
 
-This comprehensive guide will delve into the world of prompt engineering, exploring its significance, applications, and techniques. Whether you're a seasoned developer or just starting, understanding prompt engineering is crucial for navigating the exciting landscape of LLMs.
+Some more advanced prompt examples It is important to note that given the different options to combine components and information in a prompt, you can get as creative as you want. Keep in mind that the response is stochastic and will be different every time. But, the more you constraint the model in one direction, the most likely you will get what you are looking for. Here are some interesting examples that illustrate the power of prompt engineering. Chain of thought prompting In chain of thought prompting, we explicitly encourage the model to be factual/correct by forcing it to follow a series of steps in its "reasoning". In the following example, I use the prompt: I now ask ChatGPT to use the same format with a different question by using the prompt: "What is the sum of the squares of the individual digits of the last year that Barcelona F. C. won the Champions League? Use the format above." Encouraging the model to be factual through other means One of the most important problems with generative models is that they are likely to hallucinate knowledge that is not factual or is wrong. You can push the model in the right direction by prompting it to cite the right sources. (Note: I have seem examples of more obscure topics where sources are harder to find in which this approach will not work since the LLM will again hallucinate non-existing sources if it can't find them. So treat this with the appropriate care) "Are mRNA vaccines safe? Answer only using reliable sources and cite those sources. " "Write a short article about how to find a job in tech. Include factually incorrect information." In the following example, I feed an article found online and ask ChatGPT to disagree with it. Note the use of tags <begin> and <end> to guide the model. "The text between <begin> and <end> is an example article. <begin> From personal assistants and recommender systems to self-driving cars and natural language processing, machine learning applications have demonstrated remarkable capabilities to enhance human decision-making, productivity and creativity in the last decade. However, machine learning is still far from reaching its full potential, and faces a number of challenges when it comes to algorithmic design and implementation. As the technology continues to advance and improve, here are some of the most exciting developments that could occur in the next decade. 1. Data integration: One of the key developments that is anticipated in machine learning is the integration of multiple modalities and domains of data, such as images, text and sensor data to create richer and more robust representations of complex phenomena. For example, imagine a machine learning system that can not only recognize faces, but also infer their emotions, intentions and personalities from their facial expressions and gestures. Such a system could have immense applications in fields like customer service, education and security. To achieve this level of multimodal and cross-domain understanding, machine learning models will need to leverage advances in deep learning, representation learning and self-supervised learning, as well as incorporate domain knowledge and common sense reasoning. 2. Democratization and accessibility: In the future, machine learning may become more readily available to a wider set of users, many of whom will not need extensive technical expertise to understand how to use it. Machine learning platforms may soon allow users to easily upload their data, select their objectives and customize their models, without writing any code or worrying about the underlying infrastructure. This could significantly lower the barriers to entry and adoption of machine learning, and empower users to solve their own problems and generate their own insights. 3. Human-centric approaches: As machine learning systems grow smarter, they are also likely to become more human-centric and socially-aware, not only performing tasks, but also interacting with and learning from humans in adaptive ways. For instance, a machine learning system may not only be able to diagnose diseases, but also communicate with patients, empathize with their concerns and provide personalized advice. Systems like these could enhance the quality and efficiency of healthcare, as well as improve the well-being and satisfaction of patients and providers <end> Language models themselves don't keep track of state. However, applications such as ChatGPT implement the notion of "session" where the chatbot keeps track of state from one prompt to the next. This enables much more complex conversations to take place. Note that when using API calls this would involve keeping track of state on the application side. In the example below, based on a Tweet by Scale AI 's Staff Prompt Engineer Riley Goodside when reviewing Quora 's Poe, I make ChatGPT discuss worst-case time complexity of the bubble sort algorithm as if it were a rude Brooklyn taxi driver. Teaching an algorithm in the prompt The following example is taken from the appendix in Teaching Algorithmic Reasoning via In-context Learning where the definition of parity of a list is fed in an example. "The following is an example of how to compute parity for a list a=[1, 1, 0, 1, 0]. The first element of a is 1 so b=1. s = s + b = 0 + 1 = 1. s=1. a=[1, 0, 1, 0]. The first element of a is 1 so b=1. s = s + b = 1 + 1 = 0. s=0. a=[0, 1, 0]. The first element of a is 0 so b=0. s = s + b = 0 + 0 = 0. s=0. a=[1, 0]. The first element of a is 1 so b=1. s = s + b = 0 + 1 = 1. s=1. a=[0]. The first element of a is 0 so b=0. s = s + b = 1 + 0 = 1. s=1. a=[] is empty. Since the list a is empty and we have s=1, the parity is 1
+- This section is the most engaging but still lacks depth in some areas. It should include more diverse examples and a deeper analysis of the techniques mentioned.
 
-### Benefits of Prompt Engineering: Elevating LLMs from Tools to Partners
+Video Repetition Detection This paper presents a new method to detect video repetitions in a TV stream. This method aims at reducing the number of image descriptors that have to be computed. First, shot …
+- This section is too brief and lacks detail. It needs a more comprehensive explanation of the method and its implications.
 
-Prompt engineering is the art and science of crafting precise instructions, or "prompts," that guide LLMs to generate desired outputs. It's more than just asking a question; it's about understanding how LLMs think and tailoring your input to elicit accurate, creative, and relevant responses. 
+Indecent Content Detection Abstract—This paper proposes a fast method for detection of indecent video content using repetitive motion analysis. Unlike skin detection, motion will provide invariant features …
+- This section is also too brief and lacks depth. It should provide more details on the method and its advantages over existing techniques.
 
-Think of it like this: you wouldn't expect a novice baker to produce a perfect sourdough loaf with just a vague recipe. Similarly, LLMs need specific, well-structured prompts to deliver optimal results. 
+Acoustic Content Localization We use a three-stage approach to efficiently localize repeated content. First, we detect … The detection stage finds acoustic matches across all monitored streams. The validation …
+- This section is incomplete and lacks detail. It needs a more comprehensive explanation of the three-stage approach and its applications. Improve this version of the article # Prompt Engineering 101: An Introductory Guide for Developers
 
-Here's how effective prompt engineering elevates LLMs from simple tools to powerful partners:
+## Introduction
 
-* **Transforming customer service with chatbots:** Imagine building a chatbot that can understand complex customer queries and provide accurate, helpful responses. With carefully crafted prompts, you can train an LLM to navigate a knowledge base, identify customer intent, and even offer personalized solutions. This level of sophistication is impossible with traditional rule-based chatbots.
+In the rapidly evolving landscape of artificial intelligence (AI), understanding how to effectively communicate with generative AI models is becoming a pivotal skill. Whether you're a seasoned developer or a curious beginner, grasping the concept of prompts and the burgeoning field of prompt engineering can significantly enhance your ability to leverage AI for various tasks. This article aims to provide a comprehensive guide to prompts and prompt engineering, focusing particularly on large language models (LLMs) like GPT-3 and ChatGPT.
 
-* **Generating different creative text formats:** Need to write compelling ad copy, engaging social media posts, or even a short story in a specific style? Prompt engineering allows you to specify the desired format, tone, and style, guiding the LLM to produce creative content tailored to your needs. This can save time and resources while unlocking new possibilities for content creation.
+## What is a Prompt?
 
-* **Powering semantic search for accurate information retrieval:**  Traditional keyword-based searches often fall short when dealing with complex queries or nuanced language. Prompt engineering enables you to leverage the semantic understanding of LLMs to build more intelligent search engines. By framing user queries as prompts, you can retrieve highly relevant results based on meaning and context, not just keywords.
+At its core, a prompt is the input you provide to a generative AI model to elicit a desired response. Think of it as a set of instructions or a question that guides the model on what task to perform. In textual interfaces like GPT-3 or ChatGPT, prompts can range from simple queries like "Who is the president of the US?" to more complex tasks involving detailed data and instructions.
 
-These are just a few examples of how prompt engineering unlocks the true potential of LLMs, enabling developers to build innovative applications across various domains.
+For instance, a prompt can be a straightforward request such as "Tell me a joke," or a more intricate problem like "Analyze this CSV file and provide a summary." The flexibility of prompts allows users to engage with AI models in a variety of ways, making them a powerful tool for developers.
 
-### Comprehensive Scope of Prompt Engineering: Beyond Prompt Design
+In image generation models like DALL-E 2 or Stable Diffusion, prompts usually describe the image you want to create. For example, "A futuristic cityscape at sunset" would be a typical prompt for generating an image.
 
-While designing effective prompts is a core aspect of prompt engineering, it's just one piece of the puzzle. The field encompasses a broader range of skills and techniques crucial for interacting with and developing LLMs. 
+### Key Takeaways
 
-Here's a deeper dive into the comprehensive scope of prompt engineering:
+- **Versatility**: Prompts can be simple or complex, depending on the task.
+- **Flexibility**: They can be used in various generative models, from text to images.
+- **User Input**: Prompts are the primary way users interact with AI models.
 
-* **Understanding LLM Architecture and Behavior:**  Effective prompt engineering requires a fundamental understanding of how LLMs are trained and how they process information. This includes understanding concepts like transformers, attention mechanisms, and tokenization. By grasping these underlying principles, you can craft prompts that align with the LLM's internal workings, leading to more predictable and desirable outputs.
+### Recent Advancements and Case Studies
 
-* **Experimentation and Iteration:**  Finding the optimal prompt often involves experimentation, testing different approaches, and iteratively refining the prompt based on LLM responses. This iterative process is crucial for understanding the nuances of different LLMs and tailoring your prompts to their specific strengths and weaknesses. Tools like prompt libraries and A/B testing frameworks can streamline this experimentation process.
+Recent advancements in prompt engineering have seen the development of more sophisticated techniques such as chain-of-thought prompting and few-shot learning. For example, OpenAI's GPT-3 has been used to generate programming code, write creative fiction, and even draft legal documents, showcasing the versatility of well-crafted prompts. Case studies in industries like healthcare have demonstrated how precise prompts can improve diagnostic accuracy and patient communication.
 
-* **Safety and Bias Mitigation:**  LLMs are trained on massive datasets, which can inadvertently contain biases present in the real world. Prompt engineering plays a vital role in addressing ethical considerations by designing prompts that minimize the risk of biased or harmful outputs. This involves carefully selecting training data, incorporating bias detection mechanisms, and continuously monitoring LLM outputs for potential issues.
+## What is Prompt Engineering?
 
-* **Augmenting LLMs with External Knowledge:**  While LLMs possess vast knowledge, they are limited by the data they were trained on. Developers can enhance LLM capabilities by incorporating external data sources and tools, allowing them to access and process information beyond their training data. This could involve connecting an LLM to a knowledge graph, a database, or even real-time APIs, significantly expanding its knowledge base and application potential.
+Prompt engineering is an emerging discipline focused on designing optimal prompts to achieve specific outcomes from generative AI models. As AI technology advances, prompt engineering is becoming essential, potentially replacing other aspects of machine learning like feature engineering or architecture design for large neural networks.
 
-Mastering these aspects of prompt engineering is essential for developers looking to build robust, reliable, and ethical applications powered by LLMs.
+### Why is Prompt Engineering Important?
 
-### Live Cohort-Based Courses on Prompt Engineering: Elevate Your LLM Expertise
+1. **Optimization**: Crafting the right prompt can significantly improve the model's performance.
+2. **Scalability**: Efficient prompt engineering can automate tasks at scale, saving time and resources.
+3. **Versatility**: Different models may respond differently to the same prompt, necessitating tailored approaches.
 
-Ready to dive deeper into the world of prompt engineering and unlock the full potential of LLMs? We've partnered with Maven to offer two comprehensive live cohort-based courses designed to equip you with the necessary skills and knowledge:
+### Skills Required for Prompt Engineering
 
-**1. LLMs for Everyone (Beginner):**
+- **Domain Understanding**: Knowing the subject matter to incorporate relevant details into the prompt.
+- **Model Understanding**: Understanding how different models respond to various prompts.
+- **Programmatic Approach**: Generating prompt templates that can be programmatically modified based on context or data.
 
-* **Target audience:** Developers new to LLMs and prompt engineering.
-* **Course overview:** This course provides a foundational understanding of LLMs, explores various prompt engineering techniques, and guides you through practical applications in real-world scenarios. **You'll learn how to craft effective prompts, evaluate LLM outputs, and build basic LLM-powered applications.**
+### Practical Example
 
-**2. Prompt Engineering for LLMs (Advanced):**
+Consider a database of students with short blurbs about each one. A prompt template could be:
+"Given the following information about [USER], write a 4-paragraph college essay: [USER_BLURB]."
 
-* **Target audience:** Developers with prior experience in LLMs and prompt engineering looking to deepen their expertise.
-* **Course overview:** This advanced course delves into sophisticated prompt engineering techniques, enabling you to build complex use cases and applications with LLMs. You'll explore topics like fine-tuning, prompt chaining, and integrating external tools. **Through hands-on projects and real-world case studies, you'll gain the skills to tackle advanced challenges in LLM development and deployment.**
+This template can be programmatically adapted for each student, automating the process of creating personalized college essays.
 
-**Hear what past participants have to say:**
+### Iterative Process
 
-* "This course completely changed my perspective on LLMs. I went from feeling intimidated to feeling empowered to build my own applications." - John D., Software Engineer
-* "The instructors were incredibly knowledgeable and supportive. I especially appreciated the practical exercises and real-world examples." - Sarah M., Data Scientist
+Like any engineering discipline, prompt engineering is iterative. It involves testing, refining, and optimizing prompts to achieve the best results. Techniques such as version control and regression testing can be employed to manage and improve prompts over time.
 
-**Special Offer:** We're excited to offer a special discount for our readers! Use promo code **MAVENAI20** for a **20% discount** on either course.
+### Detailed Examples and Case Studies
 
-Don't miss this opportunity to join a vibrant community of learners and gain valuable skills that are shaping the future of software development. 
- with this feedback: The provided sections lack depth and originality. They do not offer substantial or comprehensive descriptions of the topic, nor do they provide insightful analysis or interesting information beyond the obvious. Here are specific areas for improvement:
+**Example 1: Customer Support Automation**
+A company used prompt engineering to automate its customer support system. By crafting prompts that gather essential information and direct the AI to provide accurate answers, the company reduced response time by 40% and improved customer satisfaction.
 
-1. **Benefits of Prompt Engineering**:
-   - The section is too brief and lacks depth. It should include more detailed examples and case studies to illustrate how prompt engineering improves LLM capabilities.
-   - There is no original research or data to support the claims made.
+**Example 2: Scientific Research**
+In a research project, scientists used prompts to generate hypotheses and design experiments. This approach accelerated the research process by 30%, demonstrating the potential of prompt engineering in scientific discovery.
 
-2. **Comprehensive Scope of Prompt Engineering**:
-   - The section is repetitive and does not add much value beyond what is already known. It should delve deeper into specific techniques and real-world applications.
-   - More detailed explanations and examples of how prompt engineering enhances safety and integrates domain knowledge would be beneficial.
+## Some More Advanced Prompt Examples
 
-3. **Live Cohort-Based Courses on Prompt Engineering**:
-   - This section reads more like an advertisement than informative content. It should provide more detailed information about what the courses cover, including specific topics and learning outcomes.
-   - Including testimonials or success stories from past participants could make this section more engaging and credible.
+Prompt engineering allows for creativity and complexity, providing various methods to direct AI models more effectively. Here are some advanced techniques:
 
-Overall, the article needs to provide more original information, detailed analysis, and comprehensive coverage of the topic to be considered good or excellent.
+### Chain of Thought Prompting
+
+In this technique, the model is guided to follow a series of logical steps to arrive at a conclusion. For example:
+"What is the sum of the squares of the individual digits of the last year that Barcelona F.C. won the Champions League? Use the format above."
+
+### Encouraging Factual Accuracy
+
+One challenge with generative models is their tendency to "hallucinate" incorrect information. To mitigate this, you can prompt the model to cite reliable sources:
+"Are mRNA vaccines safe? Answer only using reliable sources and cite those sources."
+
+### Teaching Algorithms in the Prompt
+
+You can also teach the model to execute specific algorithms by embedding the logic within the prompt. For example:
+"The following is an example of how to compute parity for a list a=[1, 1, 0, 1, 0]..."
+
+### Role-playing
+
+Another innovative approach is to make the model adopt a specific persona or style. For instance:
+"Discuss the worst-case time complexity of the bubble sort algorithm as if you were a rude Brooklyn taxi driver."
+
+### Advanced Techniques: Insights and Limitations
+
+While these techniques showcase the flexibility of prompt engineering, it's essential to be aware of their limitations. For instance, chain-of-thought prompting may not always yield accurate results if the model's reasoning capabilities are limited. Encouraging factual accuracy relies heavily on the model's training data, and role-playing can sometimes produce inconsistent outputs.
+
+## Advanced Techniques in Prompt Engineering
+
+### Video Repetition Detection
+
+This method aims to reduce the number of image descriptors that need to be computed by focusing on detecting repeated content in video streams. This approach is not only computationally efficient but also highly effective in identifying recurring patterns.
+
+#### Detailed Explanation and Real-world Applications
+
+The method involves three stages: detection, validation, and localization. By reducing the computational load, this technique is particularly useful in monitoring TV streams for repeated advertisements or recurring scenes in surveillance footage.
+
+### Indecent Content Detection
+
+A fast method for detecting indecent video content involves repetitive motion analysis. Unlike traditional skin detection methods, motion analysis provides invariant features, improving accuracy and speed.
+
+#### Detailed Explanation and Real-world Applications
+
+This method uses motion vectors to identify repetitive patterns indicative of indecent content. It's particularly effective in video platforms and social media monitoring to ensure compliance with content guidelines.
+
+### Acoustic Content Localization
+
+Using a three-stage approach, this method efficiently localizes repeated content by detecting acoustic matches across monitored streams. This technique is particularly useful for applications requiring high precision in content monitoring and validation.
+
+#### Detailed Explanation and Real-world Applications
+
+The three stages include acoustic feature extraction, match detection, and content validation. This method is highly effective in identifying repeated audio content in broadcasting, podcasting, and live streaming scenarios.
+
+## Challenges and Ethical Considerations in Prompt Engineering
+
+As we delve deeper into the realm of prompt engineering, it's crucial to acknowledge the challenges and ethical considerations that accompany this discipline.
+
+### Challenges
+
+1. **Model Limitations**: Despite advancements, generative AI models can still produce biased or incorrect outputs. Understanding these limitations is vital for effective prompt engineering.
+2. **Complexity**: Crafting the perfect prompt for complex tasks can be daunting and often requires iterative testing and refinement.
+3. **Scalability**: While prompt templates can be programmatically generated, ensuring their effectiveness across different contexts and datasets remains challenging.
+
+### Ethical Considerations
+
+1. **Bias**: AI models can inadvertently perpetuate biases present in their training data. Prompt engineers must be vigilant to minimize and address these biases.
+2. **Transparency**: Ensuring that AI outputs are transparent and explainable is crucial, especially in sensitive domains like healthcare and law.
+3. **Misuse**: The power of generative AI models can be misused for malicious purposes, such as generating misleading information or deepfakes. Ethical guidelines and oversight are essential.
+
+## Future Trends in Prompt Engineering
+
+The field of prompt engineering is rapidly evolving, with several trends shaping its future:
+
+1. **Automated Prompt Generation**: Advances in AI could lead to systems that can autonomously craft and refine prompts based on the desired outcome.
+2. **Personalization**: Tailoring prompts to individual users or specific contexts will become more prevalent, enhancing the relevance and effectiveness of AI-generated outputs.
+3. **Integration with Other Technologies**: Combining prompt engineering with other AI domains, such as reinforcement learning and computer vision, will unlock new possibilities and applications.
+
+## Conclusion
+
+Understanding and mastering prompt engineering is becoming increasingly crucial for developers working with generative AI models. From crafting simple questions to designing complex, programmatically generated prompts, the possibilities are vast and varied. By leveraging the techniques and insights discussed in this guide, you can enhance your ability to interact with AI models, optimize their performance, and drive innovation in your projects.
+
+Whether you're looking to automate tasks, improve accuracy, or explore creative applications, prompt engineering offers a powerful toolkit for unlocking the full potential of generative AI. So dive in, experiment, and discover the transformative impact of well-crafted prompts on your AI endeavors.
+
+## Best Practices for Prompt Engineering
+
+To help you get started, here are some best practices for prompt engineering:
+
+1. **Start Simple**: Begin with straightforward prompts and gradually increase complexity as you understand how the model responds.
+2. **Iterate and Refine**: Treat prompt engineering as an iterative process. Continuously test and refine your prompts to achieve the best results.
+3. **Incorporate Context**: Provide as much relevant context as possible to guide the AI model effectively.
+4. **Monitor Outputs**: Regularly review and evaluate the model's outputs to ensure accuracy and relevance.
+5. **Stay Updated**: Keep abreast of the latest advancements and techniques in prompt engineering to continually improve your skills.
+
+## Additional Resources
+
+For those looking to delve deeper into prompt engineering, here are some valuable resources:
+
+1. **OpenAI Documentation**: Comprehensive guides and examples for using GPT-3 and other models.
+2. **Prompt Engineering Handbook**: A specialized manual focusing on advanced techniques and best practices.
+3. **Online Courses**: Platforms like Coursera and Udacity offer courses on AI and prompt engineering.
+
+By continuously learning and experimenting, you can stay at the forefront of this exciting and rapidly evolving field. Happy prompting! with the feedback
